@@ -7,7 +7,7 @@ namespace WheatGrainClassifierWpfApp.Commands
         private readonly Predicate<object> _canExecute;
         private readonly Action<object> _execute;
 
-        public RelayCommand(Predicate<object> canExecute, Action<object> execute)
+        public RelayCommand(Predicate<object>? canExecute = null, Action<object> execute)
         {
             _canExecute = canExecute;
             _execute = execute;
