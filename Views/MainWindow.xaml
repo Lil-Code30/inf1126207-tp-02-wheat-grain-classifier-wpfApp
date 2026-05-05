@@ -6,7 +6,24 @@
         xmlns:local="clr-namespace:WheatGrainClassifierWpfApp"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
-    <Grid>
-
-    </Grid>
+    <StackPanel>
+        <DataGrid ItemsSource="{Binding TrainData}"
+          AutoGenerateColumns="False"
+          IsReadOnly="True"
+          CanUserAddRows="False">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Variety"     Binding="{Binding Variety}"       Width="*"/>
+                <DataGridTextColumn Header="Surface"    Binding="{Binding Area}"        Width="*"/>
+                <DataGridTextColumn Header="Périmètre"  Binding="{Binding Perimeter}"   Width="*"/>
+                <DataGridTextColumn Header="Compacité"  Binding="{Binding Compactness}" Width="*"/>
+                <DataGridTextColumn Header="Longueur"   Binding="{Binding Kernel_Length}" Width="*"/>
+                <DataGridTextColumn Header="Largeur"    Binding="{Binding Kernel_Width}" Width="*"/>
+                <DataGridTextColumn Header="Asymétrie"  Binding="{Binding Asymmetry_Coefficient}" Width="*"/>
+                <DataGridTextColumn Header="Sillon"     Binding="{Binding Groove_Length}" Width="*"/>
+            </DataGrid.Columns>
+            
+        </DataGrid>
+        <Button Content="Charger Train" Command="{Binding LoadTrainCommand}" />
+    </StackPanel>
+    
 </Window>

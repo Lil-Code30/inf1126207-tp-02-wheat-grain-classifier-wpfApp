@@ -71,13 +71,13 @@ namespace WheatGrainClassifierWpfApp.ViewModels
         }
     
         // Commandes
-        public ICommand LaodTrainCommand { get; }
-        public ICommand LaodTestCommand { get; }
+        public ICommand LoadTrainCommand { get; }
+        public ICommand LoadTestCommand { get; }
 
         public MainViewModel()
         {
-            LaodTrainCommand = new RelayCommand(LoadTrainFile);
-            LaodTestCommand = new RelayCommand(LoadTestFile);
+            LoadTrainCommand = new RelayCommand(LoadTrainFile);
+            LoadTestCommand = new RelayCommand(LoadTestFile);
         }
 
         //fontions pour les commands

@@ -19,6 +19,7 @@ namespace WheatGrainClassifierWpfApp
         public MainWindow()
         {
             InitializeComponent();
+            DataContext = new ViewModels.MainViewModel();
         }
     }
 }
