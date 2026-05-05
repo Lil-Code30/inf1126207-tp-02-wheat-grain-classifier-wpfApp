@@ -8,7 +8,7 @@ namespace WheatGrainClassifierWpfApp.Commands
         private readonly Action<object?> _execute;
 
         // Constructeur pour commandes sans paramètre.
-        public RelayCommand(Action execute, Predicate<bool?>? canExecute = null)
+        public RelayCommand(Action execute, Func<bool>? canExecute = null)
         {
             _execute = _ => execute();
             _canExecute = canExecute is null ? null : _ => canExecute();
