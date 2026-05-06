@@ -4,9 +4,27 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WheatGrainClassifierWpfApp"
+        xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <Grid>
+        Title="Classification Automatique Des Grains" Height="600" Width="1000"
+        WindowStartupLocation="CenterScreen">
 
-    </Grid>
+    <DockPanel>
+        <StackPanel Orientation="Horizontal" DockPanel.Dock="Top"  Background="White" Height="50">
+            <Button Command="{Binding showCalculationCommand}" Background="Transparent" BorderThickness="0" Padding="10">
+                <StackPanel Orientation="Horizontal">
+                    <iconPacks:PackIconMaterial Kind="Calculator" Width="20"/>
+                    <TextBlock Text="Calcul" Margin="5,0"/>
+                </StackPanel>
+            </Button>
+
+            <Button Command="{Binding ShowExperienceCommand}" Background="Transparent" BorderThickness="0" Padding="10">
+                <StackPanel Orientation="Horizontal">
+                    <iconPacks:PackIconMaterial Kind="History" Width="20"/>
+                    <TextBlock Text="Expériences" Margin="5,0"/>
+                </StackPanel>
+            </Button>
+        </StackPanel>
+        <ContentControl Content="{Binding CurrentView}"/>
+    </DockPanel>
 </Window>
