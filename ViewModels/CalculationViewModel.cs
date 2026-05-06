@@ -10,13 +10,41 @@ namespace WheatGrainClassifierWpfApp.ViewModels
 {
     public class CalculationViewModel: BaseViewModel
     {
-        // collection observable
+        private int _k;
+        private string _selectedDistance;
+        // collection observable 
         private ObservableCollection<Grain> _trainData;
         private ObservableCollection<Grain> _testData;
+        public ObservableCollection<string> Distances { get; } = new ObservableCollection<string>() { "Euclidienne", "Manhattan" };
         private string _trainFilePath;
         private string _testFilePath;
 
         // getter et setters
+        public int K
+        {
+            get => _k;
+            set
+            {
+                if(value != _k && value > 0)
+                {
+                    _k = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        public string SelectedDistance
+        {
+            get => _selectedDistance;
+            set
+            {
+                if(value != _selectedDistance)
+                {
+                    _selectedDistance = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
 
         public ObservableCollection<Grain> TrainData
         {

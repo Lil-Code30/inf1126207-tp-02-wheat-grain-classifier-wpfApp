@@ -125,8 +125,8 @@
             </StackPanel>
 
             <!-- K -->
-            <TextBlock Text="k (nombre de voisins)" Margin="0,10,0,0"/>
-            <TextBox Text="{Binding K}" Margin="0,5"/>
+            <TextBlock Text="Valeur de k :" Margin="0,10,0,0"/>
+            <TextBox Text="{Binding K, UpdateSourceTrigger=PropertyChanged}" Margin="0,5"/>
 
             <!-- DISTANCE -->
             <TextBlock Text="Distance" Margin="0,10,0,0"/>
