@@ -20,6 +20,7 @@ namespace WheatGrainClassifierWpfApp.ViewModels
         private ObservableCollection<Grain> _trainData;
         private ObservableCollection<Grain> _testData;
         public ObservableCollection<string> Distances { get; } = new ObservableCollection<string>() { "Distance Euclidienne", "Distance de Manhattan" };
+        public ObservableCollection<ConfusionRow> ConfusionMatrix { get; } = new();
         private string _trainFilePath;
         private string _testFilePath;
 
@@ -205,12 +206,51 @@ namespace WheatGrainClassifierWpfApp.ViewModels
 
                 // calcul de la performances du modèle
                 Exactitude = PerformanceService.Exactitude(predictions, actuels);
+
+                string[] classNames = new string[] { "Canadian", "Kama", "Rosa", };
+                int[,] matriceDeConfusion = PerformanceService.MatriceDeConfusion(actuels, predictions, classNames.Length);
+
+                // mis a jour de 'ConfusionMatrix' avec une nouvelle matrix apres calcul
+                UpdateConfusionMatrix(matriceDeConfusion);
             }
             catch (Exception ex)
             {
                 MessageBox.Show($"Erreur lors de l'entraînement et la prédiction : {ex.Message}",
                     "Erreur", MessageBoxButton.OK, MessageBoxImage.Error);
             }
+        }
+
+        /// <summary>
+        /// mets a jour la Matrix de confusion  avec une nouvelle matrix
+        /// </summary>
+        /// <param name="matrice"></param>
+        private void UpdateConfusionMatrix(int[,] matrice)
+        {
+            ConfusionMatrix.Clear();
+
+            ConfusionMatrix.Add(new ConfusionRow
+            {
+                Variety = "Canadian",
+                Canadian = matrice[0, 0],
+                Kama = matrice[0, 1],
+                Rosa = matrice[0, 2]
+            });
+
+            ConfusionMatrix.Add(new ConfusionRow
+            {
+                Variety = "Kama",
+                Canadian = matrice[1, 0],
+                Kama = matrice[1, 1],
+                Rosa = matrice[1, 2]
+            });
+
+            ConfusionMatrix.Add(new ConfusionRow
+            {
+                Variety = "Rosa",
+                Canadian = matrice[2, 0],
+                Kama = matrice[2, 1],
+                Rosa = matrice[2, 2]
+            });
         }
     }
 }

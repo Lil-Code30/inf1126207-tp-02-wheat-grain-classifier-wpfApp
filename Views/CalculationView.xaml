@@ -155,7 +155,14 @@
 
                 <!-- CONFUSION MATRIX -->
                 <TextBlock Text="Matrice de confusion" Margin="0,15,0,5"/>
-                <DataGrid ItemsSource="{Binding ConfusionMatrix}" AutoGenerateColumns="True" Height="155"/>
+                <DataGrid ItemsSource="{Binding ConfusionMatrix}" Padding="3" AutoGenerateColumns="False" Height="115">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Actuel \\ Prédit" Binding="{Binding Variety}" Width="*"/>
+                        <DataGridTextColumn Header="Canadian" Binding="{Binding Canadian}" Width="*"/>
+                        <DataGridTextColumn Header="Kama" Binding="{Binding Kama}" Width="*"/>
+                        <DataGridTextColumn Header="Rosa" Binding="{Binding Rosa}" Width="*"/>
+                    </DataGrid.Columns>
+                </DataGrid>
 
             </StackPanel>
         </StackPanel>
