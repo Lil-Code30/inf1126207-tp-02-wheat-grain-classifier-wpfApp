@@ -44,11 +44,7 @@
                     <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
 
                         <!-- Folder Icon -->
-                        <iconPacks:PackIconMaterial Kind="FolderUpload"
-                                        Width="16"
-                                        Height="16"
-                                        Margin="0,0,6,0"
-                                        Foreground="#3B82F6"/>
+                        <iconPacks:PackIconMaterial Kind="FolderUpload" Width="16" Height="16" Margin="0,0,6,0" Foreground="#3B82F6"/>
 
                         <TextBlock Text="Charger Train"
                        VerticalAlignment="Center"/>
@@ -57,10 +53,7 @@
             </Grid>
             
 
-            <DataGrid Grid.Row="1"
-                      ItemsSource="{Binding TrainData}"
-                      AutoGenerateColumns="False"
-                      IsReadOnly="True">
+            <DataGrid Grid.Row="1" ItemsSource="{Binding TrainData}" AutoGenerateColumns="False" IsReadOnly="True">
 
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="Label"     Binding="{Binding Variety}"       Width="*"/>
@@ -70,7 +63,7 @@
                     <DataGridTextColumn Header="Longueur"   Binding="{Binding Kernel_Length}" Width="*"/>
                     <DataGridTextColumn Header="Largeur"    Binding="{Binding Kernel_Width}" Width="*"/>
                     <DataGridTextColumn Header="Asymétrie"  Binding="{Binding Asymmetry_Coefficient}" Width="*"/>
-                    <DataGridTextColumn Header="Sillon"     Binding="{Binding Kernel_GrooveLength}" Width="*"/>
+                    <DataGridTextColumn Header="Sillon"     Binding="{Binding Groove_Length}" Width="*"/>
                 </DataGrid.Columns>
 
             </DataGrid>
@@ -107,10 +100,7 @@
                 </Button>
             </Grid>
 
-            <DataGrid Grid.Row="3"
-                      ItemsSource="{Binding TestData}"
-                      AutoGenerateColumns="False"
-                      IsReadOnly="True">
+            <DataGrid Grid.Row="3" ItemsSource="{Binding TestData}" AutoGenerateColumns="False" IsReadOnly="True">
 
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="Label"     Binding="{Binding Variety}"       Width="*"/>
@@ -120,36 +110,54 @@
                     <DataGridTextColumn Header="Longueur"   Binding="{Binding Kernel_Length}" Width="*"/>
                     <DataGridTextColumn Header="Largeur"    Binding="{Binding Kernel_Width}" Width="*"/>
                     <DataGridTextColumn Header="Asymétrie"  Binding="{Binding Asymmetry_Coefficient}" Width="*"/>
-                    <DataGridTextColumn Header="Sillon"     Binding="{Binding Kernel_GrooveLength}" Width="*"/>
+                    <DataGridTextColumn Header="Sillon"     Binding="{Binding Groove_Length}" Width="*"/>
                 </DataGrid.Columns>
 
             </DataGrid>
         </Grid>
         
-        <!-- Droit -->
-        <StackPanel Background="white" Grid.Column="1" Margin="15">
+        <!-- Droite -->
+        <StackPanel  Grid.Column="1" Margin="15">
 
-            <TextBlock Text="Configuration" FontWeight="Bold" FontSize="16"/>
+            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                <iconPacks:PackIconMaterial Kind="Cog" Foreground="#1F6FEB"  VerticalAlignment="Center"/>
+                <TextBlock Text="Configuration du classifieur" FontSize="16"  VerticalAlignment="Center" FontWeight="SemiBold" Margin="5,0"/>
+            </StackPanel>
 
-            <TextBlock Text="k"/>
+            <!-- K -->
+            <TextBlock Text="k (nombre de voisins)" Margin="0,10,0,0"/>
             <TextBox Text="{Binding K}" Margin="0,5"/>
 
-            <TextBlock Text="Distance"/>
-            <ComboBox ItemsSource="{Binding Distances}"
-                      SelectedItem="{Binding SelectedDistance}" Margin="0,5"/>
+            <!-- DISTANCE -->
+            <TextBlock Text="Distance" Margin="0,10,0,0"/>
+            <ComboBox ItemsSource="{Binding Distances}" SelectedItem="{Binding SelectedDistance}" Margin="0,5"/>
 
-            <Button Content="Run Classification"
-                    Command="{Binding RunCommand}"
-                    Margin="0,10"/>
+            <!-- BUTTON RUN-->
+            <Button Command="{Binding RunCommand}" Padding="3" Margin="0,15,0,15" 
+                    Background="#2563EB" Foreground="White" Cursor="Hand">
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                    <iconPacks:PackIconMaterial Kind="Play"  VerticalAlignment="Center"/>
+                    <TextBlock Text="Lancer la classification" Margin="5,0"  VerticalAlignment="Center"/>
+                </StackPanel>
+            </Button>
 
-            <TextBlock Text="Accuracy :" FontWeight="Bold"/>
-            <TextBlock Text="{Binding Accuracy}"/>
 
-            <TextBlock Text="Confusion Matrix" Margin="10,10,0,5"/>
+            <StackPanel>
 
-            <DataGrid ItemsSource="{Binding ConfusionMatrix}"
-                      AutoGenerateColumns="True"
-                      Height="200"/>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                    <iconPacks:PackIconMaterial Kind="ChartBar" Foreground="#1F6FEB" Width="20" Height="20"/>
+                    <TextBlock Text="Résultats" FontWeight="Bold" FontSize="18" Margin="5,0"/>
+                </StackPanel>
+
+                <!-- Exactitude -->
+                <TextBlock Text="Exactitude : "  Margin="0,10,0,0"/>
+                <TextBlock Text="{Binding Exactitude}" FontSize="18" FontWeight="Bold" Foreground="Green"/>
+
+                <!-- CONFUSION MATRIX -->
+                <TextBlock Text="Matrice de confusion" Margin="0,15,0,5"/>
+                <DataGrid ItemsSource="{Binding ConfusionMatrix}" AutoGenerateColumns="True" Height="155"/>
+
+            </StackPanel>
         </StackPanel>
     </Grid>
 </UserControl>
