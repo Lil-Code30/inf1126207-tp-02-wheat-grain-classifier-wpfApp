@@ -151,7 +151,7 @@
 
                 <!-- Exactitude -->
                 <TextBlock Text="Exactitude : "  Margin="0,10,0,0"/>
-                <TextBlock Text="{Binding Exactitude}" FontSize="18" FontWeight="Bold" Foreground="Green"/>
+                <TextBlock Text="{Binding Exactitude, StringFormat='{}{0:F2}%'}" FontSize="18" FontWeight="Bold" Foreground="Green"/>
 
                 <!-- CONFUSION MATRIX -->
                 <TextBlock Text="Matrice de confusion" Margin="0,15,0,5"/>

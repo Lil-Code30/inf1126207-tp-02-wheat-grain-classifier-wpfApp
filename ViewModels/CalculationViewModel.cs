@@ -4,7 +4,9 @@ using System.Windows;
 using System.Windows.Input;
 using WheatGrainClassifierWpfApp.Commands;
 using WheatGrainClassifierWpfApp.Helpers;
+using WheatGrainClassifierWpfApp.Interfaces;
 using WheatGrainClassifierWpfApp.Models;
+using WheatGrainClassifierWpfApp.Services;
 
 namespace WheatGrainClassifierWpfApp.ViewModels
 {
@@ -12,14 +14,16 @@ namespace WheatGrainClassifierWpfApp.ViewModels
     {
         private int _k;
         private string _selectedDistance;
+        private double _exactitude;
+
         // collection observable 
         private ObservableCollection<Grain> _trainData;
         private ObservableCollection<Grain> _testData;
-        public ObservableCollection<string> Distances { get; } = new ObservableCollection<string>() { "Euclidienne", "Manhattan" };
+        public ObservableCollection<string> Distances { get; } = new ObservableCollection<string>() { "Distance Euclidienne", "Distance de Manhattan" };
         private string _trainFilePath;
         private string _testFilePath;
 
-        // getter et setters
+        // getters et setters
         public int K
         {
             get => _k;
@@ -43,6 +47,16 @@ namespace WheatGrainClassifierWpfApp.ViewModels
                     _selectedDistance = value;
                     OnPropertyChanged();
                 }
+            }
+        }
+
+        public double Exactitude
+        {
+            get => _exactitude;
+            set
+            {
+                _exactitude = value;
+                OnPropertyChanged();
             }
         }
 
@@ -101,14 +115,16 @@ namespace WheatGrainClassifierWpfApp.ViewModels
         // Commandes
         public ICommand LoadTrainCommand { get; }
         public ICommand LoadTestCommand { get; }
+        public ICommand RunCommand { get; }
 
         public CalculationViewModel()
         {
             LoadTrainCommand = new RelayCommand(LoadTrainFile);
             LoadTestCommand = new RelayCommand(LoadTestFile);
+            RunCommand = new RelayCommand(RunClassification, CanRunClassification);
         }
 
-        //fontions pour les commands
+        // chargement des fichiers test et apprentisage
         private void LoadTrainFile()
         {
             var dialog = new OpenFileDialog { Filter = "CSV Files (*.csv)|*.csv" };
@@ -152,6 +168,48 @@ namespace WheatGrainClassifierWpfApp.ViewModels
                     MessageBox.Show($"Erreur lors du chargement : {ex.Message}",
                         "Erreur", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
+            }
+        }
+
+        // Vérification avant execution
+        private bool CanRunClassification() => TrainData?.Count > 0 && TestData?.Count > 0 && K > 0 && SelectedDistance != null;
+
+        // Entraînement et Prédiction
+        private void RunClassification()
+        {
+            try
+            {
+                // choix de la metrique de distance a utiliser 
+                IDistance distance;
+                if (SelectedDistance == "Distance Euclidienne")
+                {
+                    distance = new EuclideanDistance();
+                }
+                else
+                {
+                    distance = new ManhattanDistance();
+                }
+
+                KnnService knn = new KnnService(K, distance, TrainData);
+
+                // list des labels
+                List<string> predictions = new List<string>();
+                List<string> actuels = new List<string>();
+
+                foreach (Grain grainTest in TestData)
+                {
+                    string prediction = knn.Predire(grainTest);
+                    predictions.Add(prediction);
+                    actuels.Add(grainTest.Variety);
+                }
+
+                // calcul de la performances du modèle
+                Exactitude = PerformanceService.Exactitude(predictions, actuels);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Erreur lors de l'entraînement et la prédiction : {ex.Message}",
+                    "Erreur", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
     }
