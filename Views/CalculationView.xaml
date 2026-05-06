@@ -125,8 +125,8 @@
             </StackPanel>
 
             <!-- K -->
-            <TextBlock Text="k (nombre de voisins)" Margin="0,10,0,0"/>
-            <TextBox Text="{Binding K}" Margin="0,5"/>
+            <TextBlock Text="Valeur de k :" Margin="0,10,0,0"/>
+            <TextBox Text="{Binding K, UpdateSourceTrigger=PropertyChanged}" Margin="0,5"/>
 
             <!-- DISTANCE -->
             <TextBlock Text="Distance" Margin="0,10,0,0"/>
@@ -151,11 +151,18 @@
 
                 <!-- Exactitude -->
                 <TextBlock Text="Exactitude : "  Margin="0,10,0,0"/>
-                <TextBlock Text="{Binding Exactitude}" FontSize="18" FontWeight="Bold" Foreground="Green"/>
+                <TextBlock Text="{Binding Exactitude, StringFormat='{}{0:F2}%'}" FontSize="18" FontWeight="Bold" Foreground="Green"/>
 
                 <!-- CONFUSION MATRIX -->
                 <TextBlock Text="Matrice de confusion" Margin="0,15,0,5"/>
-                <DataGrid ItemsSource="{Binding ConfusionMatrix}" AutoGenerateColumns="True" Height="155"/>
+                <DataGrid ItemsSource="{Binding ConfusionMatrix}" Padding="3" AutoGenerateColumns="False" Height="115">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Actuel \\ Prédit" Binding="{Binding Variety}" Width="*"/>
+                        <DataGridTextColumn Header="Canadian" Binding="{Binding Canadian}" Width="*"/>
+                        <DataGridTextColumn Header="Kama" Binding="{Binding Kama}" Width="*"/>
+                        <DataGridTextColumn Header="Rosa" Binding="{Binding Rosa}" Width="*"/>
+                    </DataGrid.Columns>
+                </DataGrid>
 
             </StackPanel>
         </StackPanel>
