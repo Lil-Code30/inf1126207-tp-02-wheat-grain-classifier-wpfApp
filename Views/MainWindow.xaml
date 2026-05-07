@@ -21,7 +21,7 @@
             <Button Command="{Binding ShowExperienceCommand}" Background="Transparent" BorderThickness="0" Padding="10">
                 <StackPanel Orientation="Horizontal">
                     <iconPacks:PackIconMaterial Kind="History" Width="20"/>
-                    <TextBlock Text="Expériences" Margin="5,0"/>
+                    <TextBlock Text="Historique" Margin="5,0"/>
                 </StackPanel>
             </Button>
         </StackPanel>

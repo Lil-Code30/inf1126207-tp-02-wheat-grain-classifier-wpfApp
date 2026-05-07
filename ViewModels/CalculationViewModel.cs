@@ -3,6 +3,7 @@ using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Input;
 using WheatGrainClassifierWpfApp.Commands;
+using WheatGrainClassifierWpfApp.Db;
 using WheatGrainClassifierWpfApp.Helpers;
 using WheatGrainClassifierWpfApp.Interfaces;
 using WheatGrainClassifierWpfApp.Models;
@@ -15,14 +16,24 @@ namespace WheatGrainClassifierWpfApp.ViewModels
         private int _k;
         private string _selectedDistance;
         private double _exactitude;
+        private int[,] _matriceDeConfusion;
+        string[] classNames = new string[] { "Canadian", "Kama", "Rosa", };
+
 
         // collection observable 
         private ObservableCollection<Grain> _trainData;
         private ObservableCollection<Grain> _testData;
         public ObservableCollection<string> Distances { get; } = new ObservableCollection<string>() { "Distance Euclidienne", "Distance de Manhattan" };
         public ObservableCollection<ConfusionRow> ConfusionMatrix { get; } = new();
+
         private string _trainFilePath;
         private string _testFilePath;
+
+        // Api Service
+        private readonly ApiService _apiService = new ApiService();
+        private ObservableCollection<User> _users;
+        private User _selectedUser;
+
 
         // getters et setters
         public int K
@@ -113,16 +124,44 @@ namespace WheatGrainClassifierWpfApp.ViewModels
             }
         }
 
+        public ObservableCollection<User> Users
+        {
+            get => _users;
+            set
+            {
+                if(value != _users)
+                {
+                    _users = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        public User SelectedUser
+        {
+            get => _selectedUser;
+            set
+            {
+                if(_selectedUser != value)
+                {
+                    _selectedUser = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
         // Commandes
         public ICommand LoadTrainCommand { get; }
         public ICommand LoadTestCommand { get; }
         public ICommand RunCommand { get; }
+        public ICommand LaodUsersCommand { get; }
 
         public CalculationViewModel()
         {
             LoadTrainCommand = new RelayCommand(LoadTrainFile);
             LoadTestCommand = new RelayCommand(LoadTestFile);
             RunCommand = new RelayCommand(RunClassification, CanRunClassification);
+            LaodUsersCommand = new RelayCommand(LoadUsers);
         }
 
         // chargement des fichiers test et apprentisage
@@ -173,7 +212,7 @@ namespace WheatGrainClassifierWpfApp.ViewModels
         }
 
         // Vérification avant execution
-        private bool CanRunClassification() => TrainData?.Count > 0 && TestData?.Count > 0 && K > 0 && SelectedDistance != null;
+        private bool CanRunClassification() => TrainData?.Count > 0 && TestData?.Count > 0 && K > 0 && SelectedDistance != null && SelectedUser != null;
 
         // Entraînement et Prédiction
         private void RunClassification()
@@ -193,7 +232,7 @@ namespace WheatGrainClassifierWpfApp.ViewModels
 
                 KnnService knn = new KnnService(K, distance, TrainData);
 
-                // list des labels
+                // liste des labels
                 List<string> predictions = new List<string>();
                 List<string> actuels = new List<string>();
 
@@ -207,11 +246,17 @@ namespace WheatGrainClassifierWpfApp.ViewModels
                 // calcul de la performances du modèle
                 Exactitude = PerformanceService.Exactitude(predictions, actuels);
 
-                string[] classNames = new string[] { "Canadian", "Kama", "Rosa", };
-                int[,] matriceDeConfusion = PerformanceService.MatriceDeConfusion(actuels, predictions, classNames.Length);
+                _matriceDeConfusion = PerformanceService.MatriceDeConfusion(actuels, predictions, classNames.Length);
 
                 // mis a jour de 'ConfusionMatrix' avec une nouvelle matrix apres calcul
-                UpdateConfusionMatrix(matriceDeConfusion);
+                UpdateConfusionMatrix(_matriceDeConfusion);
+
+                // sauvegarde dans la db
+                WheatGrainClassifierDbContext context = new WheatGrainClassifierDbContext();
+                ExperimentRepo experimentRepo = new ExperimentRepo(context);
+
+                experimentRepo.Save(K, classNames, SelectedDistance, Exactitude, _matriceDeConfusion, TrainData.Count, TestData.Count, SelectedUser.Id, SelectedUser.FullName);
+
             }
             catch (Exception ex)
             {
@@ -251,6 +296,21 @@ namespace WheatGrainClassifierWpfApp.ViewModels
                 Kama = matrice[2, 1],
                 Rosa = matrice[2, 2]
             });
+        }
+
+        private void LoadUsers()
+        {
+            
+            try
+            {
+                var users = _apiService.GetUsers("users");
+                Users = new ObservableCollection<User>(users);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Erreur API : {ex.Message}", "Erreur réseau",
+                    MessageBoxButton.OK, MessageBoxImage.Warning);
+            }
         }
     }
 }
