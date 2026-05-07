@@ -15,12 +15,16 @@ namespace WheatGrainClassifierWpfApp.ViewModels
         private int _k;
         private string _selectedDistance;
         private double _exactitude;
+        private int[,] _matriceDeConfusion;
+        string[] classNames = new string[] { "Canadian", "Kama", "Rosa", };
+
 
         // collection observable 
         private ObservableCollection<Grain> _trainData;
         private ObservableCollection<Grain> _testData;
         public ObservableCollection<string> Distances { get; } = new ObservableCollection<string>() { "Distance Euclidienne", "Distance de Manhattan" };
         public ObservableCollection<ConfusionRow> ConfusionMatrix { get; } = new();
+
         private string _trainFilePath;
         private string _testFilePath;
 
@@ -207,11 +211,10 @@ namespace WheatGrainClassifierWpfApp.ViewModels
                 // calcul de la performances du modèle
                 Exactitude = PerformanceService.Exactitude(predictions, actuels);
 
-                string[] classNames = new string[] { "Canadian", "Kama", "Rosa", };
-                int[,] matriceDeConfusion = PerformanceService.MatriceDeConfusion(actuels, predictions, classNames.Length);
+                _matriceDeConfusion = PerformanceService.MatriceDeConfusion(actuels, predictions, classNames.Length);
 
                 // mis a jour de 'ConfusionMatrix' avec une nouvelle matrix apres calcul
-                UpdateConfusionMatrix(matriceDeConfusion);
+                UpdateConfusionMatrix(_matriceDeConfusion);
             }
             catch (Exception ex)
             {
