@@ -231,7 +231,7 @@ namespace WheatGrainClassifierWpfApp.ViewModels
 
                 KnnService knn = new KnnService(K, distance, TrainData);
 
-                // list des labels
+                // liste des labels
                 List<string> predictions = new List<string>();
                 List<string> actuels = new List<string>();
 
@@ -249,6 +249,10 @@ namespace WheatGrainClassifierWpfApp.ViewModels
 
                 // mis a jour de 'ConfusionMatrix' avec une nouvelle matrix apres calcul
                 UpdateConfusionMatrix(_matriceDeConfusion);
+
+                // sauvegarde dans la db
+                ExperiementRepo.Save(K, classNames, SelectedDistance, Exactitude, TrainData.Count, TestData.Count, SelectedUser.Id, SelectedUser.FullName);
+
             }
             catch (Exception ex)
             {
