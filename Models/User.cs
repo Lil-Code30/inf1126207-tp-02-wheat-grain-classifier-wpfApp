@@ -19,4 +19,10 @@ namespace WheatGrainClassifierWpfApp.Models
         public string FullName => $"{FirstName} {LastName}";
 
     }
+
+    public class UserResponse
+    {
+        [JsonProperty("users")]
+        public List<User> Users { get; set; }
+    }
 }

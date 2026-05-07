@@ -20,18 +20,15 @@ namespace WheatGrainClassifierWpfApp.Services
         }
 
 
-        public async Task<List<User>> GetUsersAsync(string path, int limit = 10)
+        public async Task<List<User>> GetUsersAsync(string path, int limit = 20)
         {
             HttpResponseMessage response = await _httpClient.GetAsync($"{path}?limit={limit}");
-
             if (response.IsSuccessStatusCode)
             {
-
                 string data = await response.Content.ReadAsStringAsync();
-                List<User> users = JsonConvert.DeserializeObject<List<User>>(data);
-                return users;
+                UserResponse wrapper = JsonConvert.DeserializeObject<UserResponse>(data);
+                return wrapper?.Users ?? new List<User>();
             }
-
             return new List<User>();
         }
 

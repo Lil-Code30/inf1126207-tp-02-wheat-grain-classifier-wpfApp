@@ -28,6 +28,12 @@ namespace WheatGrainClassifierWpfApp.ViewModels
         private string _trainFilePath;
         private string _testFilePath;
 
+        // Api Service
+        private readonly ApiService _apiService = new ApiService();
+        private ObservableCollection<User> _users;
+        private User _selectedUser;
+
+
         // getters et setters
         public int K
         {
@@ -117,16 +123,44 @@ namespace WheatGrainClassifierWpfApp.ViewModels
             }
         }
 
+        public ObservableCollection<User> Users
+        {
+            get => _users;
+            set
+            {
+                if(value != _users)
+                {
+                    _users = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        public User SelectedUser
+        {
+            get => _selectedUser;
+            set
+            {
+                if(_selectedUser != value)
+                {
+                    _selectedUser = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
         // Commandes
         public ICommand LoadTrainCommand { get; }
         public ICommand LoadTestCommand { get; }
         public ICommand RunCommand { get; }
+        public ICommand LaodUsersCommand { get; }
 
         public CalculationViewModel()
         {
             LoadTrainCommand = new RelayCommand(LoadTrainFile);
             LoadTestCommand = new RelayCommand(LoadTestFile);
             RunCommand = new RelayCommand(RunClassification, CanRunClassification);
+            LaodUsersCommand = new RelayCommand(LoadUsers);
         }
 
         // chargement des fichiers test et apprentisage
@@ -177,7 +211,7 @@ namespace WheatGrainClassifierWpfApp.ViewModels
         }
 
         // Vérification avant execution
-        private bool CanRunClassification() => TrainData?.Count > 0 && TestData?.Count > 0 && K > 0 && SelectedDistance != null;
+        private bool CanRunClassification() => TrainData?.Count > 0 && TestData?.Count > 0 && K > 0 && SelectedDistance != null && SelectedUser != null;
 
         // Entraînement et Prédiction
         private void RunClassification()
@@ -254,6 +288,21 @@ namespace WheatGrainClassifierWpfApp.ViewModels
                 Kama = matrice[2, 1],
                 Rosa = matrice[2, 2]
             });
+        }
+
+        private void LoadUsers()
+        {
+            
+            try
+            {
+                var users = _apiService.GetUsers("users");
+                Users = new ObservableCollection<User>(users);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Erreur API : {ex.Message}", "Erreur réseau",
+                    MessageBoxButton.OK, MessageBoxImage.Warning);
+            }
         }
     }
 }
