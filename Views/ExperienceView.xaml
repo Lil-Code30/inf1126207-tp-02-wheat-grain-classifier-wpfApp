@@ -8,6 +8,26 @@
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid Margin="10">
         <DataGrid ItemsSource="{Binding Experiments}"
-                  AutoGenerateColumns="True"/>
+              AutoGenerateColumns="False"
+              IsReadOnly="True">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="#" Binding="{Binding Id}" Width="40"/>
+                <DataGridTextColumn Header="k" Binding="{Binding KValue}" Width="40"/>
+                <DataGridTextColumn Header="Labels" Binding="{Binding ClassesDisplay}" Width="80"/>
+                <DataGridTextColumn Header="Train Size (Train.csv)" Binding="{Binding TrainSize}" Width="80"/>
+                <DataGridTextColumn Header="Test Size Test.csv" Binding="{Binding TestSize}" Width="80"/>
+                <DataGridTextColumn Header="Distance" Binding="{Binding DistanceValue}" Width="100"/>
+                <DataGridTextColumn Header="Exactitude (%)" Binding="{Binding Accuracy, StringFormat=F1}" Width="100"/>
+                <DataGridTextColumn Header="Matrice de confusion" Binding="{Binding ConfusionMatrixDisplay}" Width="130">
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="TextWrapping" Value="Wrap"/>
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+                <DataGridTextColumn Header="Date" Binding="{Binding ExecutionDate}" Width="140"/>
+                <DataGridTextColumn Header="Auteur" Binding="{Binding UserName}" Width="*"/>
+            </DataGrid.Columns>
+        </DataGrid>
     </Grid>
 </UserControl>

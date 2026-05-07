@@ -3,6 +3,7 @@ using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Input;
 using WheatGrainClassifierWpfApp.Commands;
+using WheatGrainClassifierWpfApp.Db;
 using WheatGrainClassifierWpfApp.Helpers;
 using WheatGrainClassifierWpfApp.Interfaces;
 using WheatGrainClassifierWpfApp.Models;
@@ -251,7 +252,10 @@ namespace WheatGrainClassifierWpfApp.ViewModels
                 UpdateConfusionMatrix(_matriceDeConfusion);
 
                 // sauvegarde dans la db
-                ExperiementRepo.Save(K, classNames, SelectedDistance, Exactitude, TrainData.Count, TestData.Count, SelectedUser.Id, SelectedUser.FullName);
+                WheatGrainClassifierDbContext context = new WheatGrainClassifierDbContext();
+                ExperimentRepo experimentRepo = new ExperimentRepo(context);
+
+                experimentRepo.Save(K, classNames, SelectedDistance, Exactitude, _matriceDeConfusion, TrainData.Count, TestData.Count, SelectedUser.Id, SelectedUser.FullName);
 
             }
             catch (Exception ex)
