@@ -9,7 +9,7 @@ namespace WheatGrainClassifierWpfApp.Db
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            string connectionString = "Data Source=DESKTOP-LDNM8KV\\SQLEXPRESS;Initial Catalog=WheatGrainClassifierDB;Integrated Security=True;Encrypt=False";
+            string connectionString = "Data Source=FIGUE\\SQLEXPRESS;Initial Catalog=WheatGrainClassifierDB;Integrated Security=True;Encrypt=False";
             string dataBaseName = "WheatGrainClassifierDB";
 
             optionsBuilder.UseSqlServer($"{connectionString};Database={dataBaseName}");
