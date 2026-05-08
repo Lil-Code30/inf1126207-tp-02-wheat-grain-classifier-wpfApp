@@ -6,25 +6,51 @@
         xmlns:local="clr-namespace:WheatGrainClassifierWpfApp"
         xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
         mc:Ignorable="d"
-        Title="Classification Automatique Des Grains" Height="600" Width="1000"
+        Title="Classification Automatique Des Grains"
+        Height="650" Width="1100"
         WindowStartupLocation="CenterScreen">
 
     <DockPanel>
-        <StackPanel Orientation="Horizontal" DockPanel.Dock="Top"  Background="White" Height="50">
-            <Button Command="{Binding showCalculationCommand}" Background="Transparent" BorderThickness="0" Padding="10">
-                <StackPanel Orientation="Horizontal">
-                    <iconPacks:PackIconMaterial Kind="Calculator" Width="20"/>
-                    <TextBlock Text="Calcul" Margin="5,0"/>
-                </StackPanel>
-            </Button>
 
-            <Button Command="{Binding ShowExperienceCommand}" Background="Transparent" BorderThickness="0" Padding="10">
-                <StackPanel Orientation="Horizontal">
-                    <iconPacks:PackIconMaterial Kind="History" Width="20"/>
-                    <TextBlock Text="Historique" Margin="5,0"/>
-                </StackPanel>
-            </Button>
-        </StackPanel>
+ 
+        <Menu DockPanel.Dock="Top" Background="White" FontSize="13" Height="28">
+            <MenuItem Header="📁 Fichier">
+                <MenuItem Header="Calcul" Command="{Binding ShowCalculationCommand}">
+                    <MenuItem.Icon>
+                        <iconPacks:PackIconMaterial Kind="Calculator" Width="14" Height="14"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <Separator/>
+                <MenuItem Header="Quitter" Click="MenuItem_Quitter">
+                    <MenuItem.Icon>
+                        <iconPacks:PackIconMaterial Kind="ExitToApp" Width="14" Height="14"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+            </MenuItem>
+            <MenuItem Header="⚙️ Classification">
+                <MenuItem Header="Lancer la classification" Command="{Binding ShowCalculationCommand}">
+                    <MenuItem.Icon>
+                        <iconPacks:PackIconMaterial Kind="Play" Width="14" Height="14"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+            </MenuItem>
+            <MenuItem Header="📋 Historique">
+                <MenuItem Header="Voir les expériences" Command="{Binding ShowExperienceCommand}">
+                    <MenuItem.Icon>
+                        <iconPacks:PackIconMaterial Kind="History" Width="14" Height="14"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+            </MenuItem>
+            <MenuItem Header="👥 Utilisateurs">
+                <MenuItem Header="Voir les utilisateurs" Command="{Binding ShowUsersCommand}">
+                    <MenuItem.Icon>
+                        <iconPacks:PackIconMaterial Kind="AccountGroup" Width="14" Height="14"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+            </MenuItem>
+        </Menu>
+        
         <ContentControl Content="{Binding CurrentView}"/>
+
     </DockPanel>
 </Window>

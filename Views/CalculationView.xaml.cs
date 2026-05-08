@@ -9,7 +9,6 @@ namespace WheatGrainClassifierWpfApp.Views
         public CalculationView()
         {
             InitializeComponent();
-            DataContext = new ViewModels.CalculationViewModel();
         }
     }
 }

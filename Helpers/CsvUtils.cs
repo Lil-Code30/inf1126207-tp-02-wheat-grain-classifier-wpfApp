@@ -23,9 +23,12 @@ namespace WheatGrainClassifierWpfApp.Helpers
                 var config = new CsvConfiguration(CultureInfo.InvariantCulture)
                 {
                     HasHeaderRecord = true,
-                    Delimiter = ";"
+                    Delimiter = ";",
+                    HeaderValidated = null,
+                    MissingFieldFound = null,
+                    PrepareHeaderForMatch = args => args.Header.ToLower()
                 };
-
+                
                 using (var reader = new StreamReader(filename))
                 using (var csv = new CsvReader(reader, config))
                 {
