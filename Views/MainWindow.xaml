@@ -15,7 +15,7 @@
  
         <Menu DockPanel.Dock="Top" Background="White" FontSize="13" Height="28">
             <MenuItem Header="📁 Fichier">
-                <MenuItem Header="Calcul" Command="{Binding ShowCalculationCommand}">
+                <MenuItem Header="Calcul" Command="{Binding showCalculationCommand}">
                     <MenuItem.Icon>
                         <iconPacks:PackIconMaterial Kind="Calculator" Width="14" Height="14"/>
                     </MenuItem.Icon>
@@ -28,7 +28,7 @@
                 </MenuItem>
             </MenuItem>
             <MenuItem Header="⚙️ Classification">
-                <MenuItem Header="Lancer la classification" Command="{Binding ShowCalculationCommand}">
+                <MenuItem Header="Lancer la classification" Command="{Binding showCalculationCommand}">
                     <MenuItem.Icon>
                         <iconPacks:PackIconMaterial Kind="Play" Width="14" Height="14"/>
                     </MenuItem.Icon>
