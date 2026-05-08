@@ -12,7 +12,7 @@
         <DataTemplate DataType="{x:Type viewModels:ExperienceViewModel}">
             <views:ExperienceView />
         </DataTemplate>
-        <!-- NUEVO: necesario para que UsersView aparezca al navegar -->
+        
         <DataTemplate DataType="{x:Type viewModels:UsersViewModel}">
             <views:UsersView />
         </DataTemplate>
